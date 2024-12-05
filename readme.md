@@ -1,6 +1,6 @@
 # Llama3.2-11B-Vision Example: Image Processing with Transformers
 
-This project demonstrates the use of a **Llama3.2-11B-Vision** model for processing images and generating text. The example provided showcases the generation of a response based on an image input and a user-provided textual prompt using a locally stored model.
+This project demonstrates the use of a **Llama3.2-11B-Vision** model for processing images. The example provided showcases the generation of a response based on an image input and a user-provided textual prompt using a locally stored model.
 
 ---
 
