@@ -1,43 +1,60 @@
-# Eye Tracking and Attention Detection
+# Llama3.2-11B-Vision Example: Image and Text Processing with Transformers
 
-This project uses **OpenCV** and **MediaPipe** to create an eye-tracking system capable of detecting if a person is looking away from the screen. It's useful for applications like exam monitoring or attention analysis.
+This project demonstrates the use of a **Llama3.2-11B-Vision** model for processing images and generating text. The example provided showcases the generation of a response based on an image input and a user-provided textual prompt using a locally stored model.
 
 ---
 
 ## Features
 
-- **Eye Aspect Ratio (EAR):** Measures eye openness for blinking or attention.
-- **Looking Away Detection:** Identifies when the person is not looking at the screen using eye position and EAR thresholds.
-- **Iris Position Tracking:** Visualizes iris positions with circles for intuitive feedback.
-- **Frame Skipping:** Reduces processing overhead by analyzing every Nth frame.
+- **Image Input**: Accepts image data from a URL or file.
+- **Text Generation**: Combines image features and user prompts to generate text.
+- **Local Model Loading**: Uses a model stored locally for offline processing.
+- **Transformer Integration**: Leverages Hugging Face's `transformers` library for model loading, tokenization, and generation.
 
 ---
 
+## Setup
+
+### Prerequisites
+- Python 3.8 or later
+- Required Python libraries:
+  - `torch`
+  - `transformers`
+  - `Pillow`
+  - `requests`
+
+ ---
+
 ## How It Works
 
-1. **Camera Input:**  
-   The application uses your webcam to capture live video frames.
+1. **Load the Model and Processor**:
+   - The **Llama3.2-11B-Vision** model and its associated processor are loaded from a local directory using Hugging Face's `transformers` library.
+   - The processor handles input preparation, ensuring compatibility with the model.
 
-2. **Face Mesh Detection:**  
-   Using **MediaPipe**, the application detects 468 facial landmarks, including those around the eyes.
+2. **Prepare the Input**:
+   - An image is fetched from a URL or loaded from a local file.
+   - A structured message is defined, including both the image and a textual prompt provided by the user.
 
-3. **EAR Calculation:**  
-   - The **Eye Aspect Ratio (EAR)** is calculated for each eye based on specific eye landmarks.
-   - EAR is determined by comparing the vertical and horizontal distances of the eye.
-   - A low EAR value indicates that the eye is closed or blinking.
+3. **Process Input**:
+   - The processor applies a chat template to format the input text and image data.
+   - This combined input is tokenized and converted into tensors.
+   - The processed inputs are moved to the same device (e.g., GPU or CPU) as the model for efficient computation.
 
-4. **Looking Away Detection Logic:**  
-   - The EAR values are compared to a threshold to determine if the eyes are open or closed.
-   - The position of the eyes relative to the screen's center is analyzed.
-   - If the EAR is below the threshold or the eyes deviate significantly from the center, the user is considered to be "Looking Away."
+4. **Generate Output**:
+   - The model generates text based on the combined image features and textual prompt.
+   - The output is constrained by a specified `max_new_tokens` parameter to limit the length of the generated response.
 
-5. **Iris Position Tracking:**  
-   - The approximate position of the irises is calculated using eye landmarks.
-   - These positions are displayed as yellow circles for intuitive feedback.
+5. **Decode and Display Output**:
+   - The processor decodes the model's output into human-readable text.
+   - The final generated response is printed or displayed for the user.
 
-6. **Real-Time Feedback:**  
-   - If the user is focused on the screen, the message "Looking At Screen" is displayed in green.
-   - If the user looks away, the message "Looking Away" is displayed in red.
-
-7. **Frame Skipping:**  
-   - To reduce computational load, only every Nth frame is processed (configurable via `frame_skip_interval`).
+6. **Example Workflow**:
+   - Input: An image of a rabbit and the text prompt *"If I had to write a haiku for this one, it would be:"*.
+   - Processing: The model combines the visual features of the image with the text prompt to generate a relevant response.
+   - Output: A creative haiku describing the image, such as:
+     ```
+     A rabbit hopping,  
+     Fields of green and sky above,  
+     Gentle spring whispers.  
+     ```
+ 
